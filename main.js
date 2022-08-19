@@ -1,19 +1,20 @@
 async function register ({
   transcodingManager
 }) {
-  transcodingManager.addVODProfile('libvpx-vp9', 'vp9-small', () => ({
+  transcodingManager.addVODProfile('libvpx-vp9', 'vp9-opus', () => ({
     inputOptions: [],
     outputOptions: ['-crf', '40']
   }));
 
-  transcodingManager.addVODEncoderPriority('video', 'libvpx-vp9', 1000);
-
-  transcodingManager.addVODProfile('libopus', 'opus-small', () => ({
+  transcodingManager.addVODProfile('libopus', 'vp9-opus', () => ({
     inputOptions: [],
-    outputOptions: ['-b:a', '48K']
+    outputOptions: ['-b:a', '256k']
   }));
 
+  transcodingManager.addVODEncoderPriority('video', 'libvpx-vp9', 1000);
   transcodingManager.addVODEncoderPriority('audio', 'libopus', 1000);
+
+
 }
 
 async function unregister () {
