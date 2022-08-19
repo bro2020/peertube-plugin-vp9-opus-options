@@ -12,8 +12,7 @@
       ]
     }
   ],
-  "css": [
-  ],
+  "css": [],
   "engine": {
     "peertube": ">=4.2.2"
   },
@@ -36,6 +35,6 @@
     "fr-FR": "./languages/fr.json"
   },
   "devDependencies": {
-    "esbuild": "^0.14.36"
+    "esbuild": "^0.14.54"
   }
 }
