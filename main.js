@@ -3,7 +3,7 @@ async function register ({
 }) {
   transcodingManager.addVODProfile('libvpx-vp9', 'vp9-opus', () => ({
     inputOptions: [],
-    outputOptions: ['-crf', '40']
+    outputOptions: ['-crf', '40', '-row-mt', '1']
   }));
 
   transcodingManager.addVODProfile('libopus', 'vp9-opus', () => ({
