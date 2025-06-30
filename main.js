@@ -58,9 +58,9 @@ async function register({ registerSetting, peertubeHelpers, transcodingManager }
   });
 
   // --- 2. Read all chosen values from the settings ---
-  const chosenCRF = await peertubeHelpers.pluginSettingsManager.getSetting('crf');
-  const chosenDeadline = await peertubeHelpers.pluginSettingsManager.getSetting('deadline');
-  const chosenBitrate = await peertubeHelpers.pluginSettingsManager.getSetting('audio-bitrate');
+  const chosenCRF = await settingsManager.getSetting('crf');
+  const chosenDeadline = await settingsManager.getSetting('deadline');
+  const chosenBitrate = await settingsManager.getSetting('audio-bitrate');
   
   logger.info(`Creating VP9/Opus profile with CRF ${chosenCRF}, Deadline ${chosenDeadline}, and Audio Bitrate ${chosenBitrate}k.`);
 
