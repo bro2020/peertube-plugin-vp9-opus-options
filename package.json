@@ -1,9 +1,9 @@
 {
-  "name": "peertube-plugin-vp9-opus",
-  "description": "PeerTube plugin vp9-opus",
+  "name": "peertube-plugin-vp9-opus-options",
+  "description": "PeerTube plugin vp9-opus-options",
   "version": "0.0.2",
-  "author": "William Rehwinkel",
-  "bugs": "https://github.com/FiskFan1999/peertube-plugin-vp9-opus/issues",
+  "author": "Bro2020",
+  "bugs": "https://github.com/bro2020/peertube-plugin-vp9-opus-options/issues",
   "clientScripts": [
     {
       "script": "dist/common-client-plugin.js",
@@ -16,7 +16,7 @@
   "engine": {
     "peertube": ">=4.2.2"
   },
-  "homepage": "https://github.com/FiskFan1999/peertube-plugin-vp9-opus/",
+  "homepage": "https://github.com/bro2020/peertube-plugin-vp9-opus-options/",
   "keywords": [
     "peertube",
     "plugin",
