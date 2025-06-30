@@ -17,7 +17,7 @@ const DEADLINE_OPTIONS = ['realtime', 'good', 'best'];
 
 // --- Plugin Registration Logic ---
 
-async function register({ registerSetting, peertubeHelpers, transcodingManager }) {
+async function register({ registerSetting, peertubeHelpers, transcodingManager, settingsManager }) {
   // Store the transcodingManager instance for later use in unregister()
   transcodingManagerInstance = transcodingManager;
 
