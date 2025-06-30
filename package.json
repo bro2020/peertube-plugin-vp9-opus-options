@@ -3,6 +3,7 @@
   "description": "PeerTube plugin vp9-opus-options",
   "version": "0.0.2",
   "author": "Bro2020",
+  "license": "AGPL-3.0",
   "bugs": "https://github.com/bro2020/peertube-plugin-vp9-opus-options/issues",
   "clientScripts": [
     {
