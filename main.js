@@ -4,6 +4,18 @@ const pluginContext = {
   logger: null
 };
 
+// An array of all setting names used by this plugin.
+const ALL_SETTING_NAMES = [
+  'video-codec-name',
+  'video-input-options',
+  'video-output-options',
+  'audio-codec-name',
+  'audio-input-options',
+  'audio-output-options',
+  'profile-name',
+  'encoder-priority'
+];
+
 // Helper function to safely parse a string of options into an array for FFmpeg.
 function parseOptionsString(optionsStr) {
   if (!optionsStr || typeof optionsStr !== 'string') return [];
@@ -21,34 +33,29 @@ function parseOptionsString(optionsStr) {
 }
 
 // This function contains the core logic to build the transcoding profile.
-// It's called on startup and every time settings are changed.
 function updateTranscodingProfiles(settings) {
   const { transcodingManager, logger } = pluginContext;
 
   // First, clear any old profiles created by this plugin.
   transcodingManager.removeAllProfilesAndEncoderPriorities();
 
-  // Get all values from the settings object.
   const videoCodec = settings['video-codec-name'];
-  const videoInputOptionsStr = settings['video-input-options'];
-  const videoOutputOptionsStr = settings['video-output-options'];
-
   const audioCodec = settings['audio-codec-name'];
-  const audioInputOptionsStr = settings['audio-input-options'];
-  const audioOutputOptionsStr = settings['audio-output-options'];
-
   const profileName = settings['profile-name'];
-  const priority = parseInt(settings['encoder-priority'], 10) || 1000;
   
-  // Don't register if codecs are not defined
-  if (!videoCodec || !audioCodec) {
-    logger.warn('Video or audio codec is not defined in the settings. Skipping profile registration.');
+  if (!videoCodec || !audioCodec || !profileName) {
+    logger.warn('Core settings (codec or profile name) are not defined. Skipping profile registration.');
     return;
   }
 
+  const videoInputOptionsStr = settings['video-input-options'];
+  const videoOutputOptionsStr = settings['video-output-options'];
+  const audioInputOptionsStr = settings['audio-input-options'];
+  const audioOutputOptionsStr = settings['audio-output-options'];
+  const priority = parseInt(settings['encoder-priority'], 10) || 1000;
+
   logger.info(`Updating profile '${profileName}' with video encoder '${videoCodec}' and audio encoder '${audioCodec}'.`);
 
-  // Add the transcoding profiles using the fully customized values.
   transcodingManager.addVODProfile(videoCodec, profileName, () => ({
     inputOptions: parseOptionsString(videoInputOptionsStr),
     outputOptions: parseOptionsString(videoOutputOptionsStr)
@@ -59,85 +66,78 @@ function updateTranscodingProfiles(settings) {
     outputOptions: parseOptionsString(audioOutputOptionsStr)
   }));
 
-  // Set the priority for the encoders.
   transcodingManager.addVODEncoderPriority('video', videoCodec, priority);
   transcodingManager.addVODEncoderPriority('audio', audioCodec, priority);
 }
 
-
 // --- Plugin Registration Logic ---
 
 async function register({ registerSetting, peertubeHelpers, transcodingManager, settingsManager }) {
-  // Store instances in our global context for other functions to use.
   pluginContext.transcodingManager = transcodingManager;
   pluginContext.logger = peertubeHelpers.logger;
-
   pluginContext.logger.info('Registering Universal Transcoding Plugin with live reload support.');
 
-  // --- 1. Register all settings as text fields ---
+  // --- 1. Register all settings ---
   registerSetting({
     name: 'video-codec-name',
     label: 'Video Codec Name',
     type: 'input',
     default: 'libvpx-vp9',
-    descriptionHTML: 'The name of the video encoder (e.g., <code>libvpx-vp9</code>, <code>libx264</code>).',
+    descriptionHTML: 'e.g., <code>libvpx-vp9</code>, <code>libx264</code>'
   });
   
   registerSetting({
     name: 'video-input-options',
-    label: 'Video Input Options (optional)',
+    label: 'Video Input Options',
     type: 'input',
     default: '',
-    descriptionHTML: 'FFmpeg input options applied before the input file (e.g., <code>-thread_queue_size 512</code>).',
+    descriptionHTML: 'e.g., <code>-thread_queue_size 512</code>'
   });
-
+  
   registerSetting({
     name: 'video-output-options',
     label: 'Video Output Options',
     type: 'textarea',
-    default: '-crf 32 -b:v 5M -deadline good -tile-columns 2 -frame-parallel 1 -row-mt 1',
-    descriptionHTML: 'FFmpeg output options for the video stream.',
+    default: '-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1',
+    descriptionHTML: 'e.g., <code>-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1</code>'
   });
-
+  
   registerSetting({
     name: 'audio-codec-name',
     label: 'Audio Codec Name',
     type: 'input',
     default: 'libopus',
-    descriptionHTML: 'The name of the audio encoder (e.g., <code>libopus</code>, <code>aac</code>).',
+    descriptionHTML: 'e.g., <code>libopus</code>, <code>aac</code>'
   });
-
+  
   registerSetting({
     name: 'audio-input-options',
-    label: 'Audio Input Options (optional)',
+    label: 'Audio Input Options',
     type: 'input',
-    default: '',
-    descriptionHTML: 'FFmpeg input options for audio (rarely needed).',
+    default: ''
   });
-
+  
   registerSetting({
-    name: 'audio-output-options',
+    name:'audio-output-options',
     label: 'Audio Output Options',
     type: 'textarea',
     default: '-b:a 192k',
-    descriptionHTML: 'FFmpeg output options for the audio stream.',
+    descriptionHTML: 'e.g., <code>-b:a 192k</code>'
   });
-
+  
   registerSetting({
     name: 'profile-name',
     label: 'Internal Profile Name',
     type: 'input',
-    default: 'optional-vp9',
-    descriptionHTML: 'A unique internal name to link the video and audio parts.',
+    default: 'customizable-vp9'
   });
-
+  
   registerSetting({
     name: 'encoder-priority',
     label: 'Encoder Priority',
     type: 'input',
     inputType: 'number',
-    default: '1000',
-    descriptionHTML: 'A number that tells PeerTube how much to prefer these encoders. Higher is better.',
+    default: '1000'
   });
 
   // --- 2. Set up the live reload listener ---
@@ -147,12 +147,12 @@ async function register({ registerSetting, peertubeHelpers, transcodingManager, 
   });
 
   // --- 3. Initial profile creation on startup ---
-  const initialSettings = await settingsManager.getSettings();
+  // We must explicitly provide the list of settings we want to get.
+  const initialSettings = await settingsManager.getSettings(ALL_SETTING_NAMES);
   updateTranscodingProfiles(initialSettings);
 }
 
 async function unregister() {
-  // Use the stored instance to remove all profiles and priorities created by this plugin.
   if (pluginContext.transcodingManager) {
     pluginContext.transcodingManager.removeAllProfilesAndEncoderPriorities();
   }
