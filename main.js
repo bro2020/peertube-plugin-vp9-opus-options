@@ -98,7 +98,7 @@ async function register({ registerSetting, peertubeHelpers, transcodingManager, 
     name: 'video-output-options',
     label: 'Video Output Options',
     type: 'input',
-    default: '-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1',
+    default: '-crf 32 -b:v 7M -minrate 4M -maxrate 10M -tile-columns 2 -frame-parallel 1 -row-mt 1',
     descriptionHTML: 'e.g., <code>-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1</code>'
   });
   
