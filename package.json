@@ -1,7 +1,7 @@
 {
   "name": "peertube-plugin-vp9-opus-options",
-  "description": "PeerTube plugin vp9-opus-options",
-  "version": "0.0.2",
+  "description": "PeerTube plugin transcoding (vp9/h264/etc and opus/aac/etc) with extensive customization options",
+  "version": "0.0.3",
   "author": "Bro2020",
   "license": "AGPL-3.0",
   "bugs": "https://github.com/bro2020/peertube-plugin-vp9-opus-options/issues",
@@ -15,14 +15,23 @@
   ],
   "css": [],
   "engine": {
-    "peertube": ">=4.2.2"
+    "peertube": ">=6.3.3"
   },
   "homepage": "https://github.com/bro2020/peertube-plugin-vp9-opus-options/",
   "keywords": [
     "peertube",
     "plugin",
+    "video",
+    "audio",
     "vp9",
-    "opus"
+    "h264",
+    "opus",
+    "aac",
+    "transcoding",
+    "encodind",
+    "decoding",
+    "customization",
+    "options"
   ],
   "library": "./main.js",
   "scripts": {
