@@ -97,7 +97,7 @@ async function register({ registerSetting, peertubeHelpers, transcodingManager, 
   registerSetting({
     name: 'video-output-options',
     label: 'Video Output Options',
-    type: 'textarea',
+    type: 'input',
     default: '-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1',
     descriptionHTML: 'e.g., <code>-crf 32 -b:v 5M -tile-columns 2 -frame-parallel 1 -row-mt 1</code>'
   });
@@ -120,7 +120,7 @@ async function register({ registerSetting, peertubeHelpers, transcodingManager, 
   registerSetting({
     name:'audio-output-options',
     label: 'Audio Output Options',
-    type: 'textarea',
+    type: 'input',
     default: '-b:a 192k',
     descriptionHTML: 'e.g., <code>-b:a 192k</code>'
   });
